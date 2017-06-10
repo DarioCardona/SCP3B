@@ -35,9 +35,9 @@ var clase = require('../schemas/class');
 	         answer.password = SHA3(request.payload.password)
 					 //console.log("entro")
 	      }
-				answer.user_type = request.payload.user_type,
-				answer.username = request.payload.username,
-	      answer.department_id = request.payload.department_id
+				answer.class_code = request.payload.class_code,
+				answer.class_name = request.payload.class_name,
+	      answer.unity = request.payload.unity
 
 				answer.save();
 				return reply(answer);
@@ -70,10 +70,10 @@ var clase = require('../schemas/class');
 	        for (var i = 0; i < data.length; i++) {
 	          var new_user = {
 							_id: data[i]._id,
-	            username: data[i].username,
-							name: data[i].name,
-	            user_type: data[i].user_type,
-	            department_id: data[i].department_id
+	            class_code: data[i].class_code,
+							class_name: data[i].class_name,
+	            unity: data[i].unity
+
 	          }
 	          array.push(new_user);
 	        };

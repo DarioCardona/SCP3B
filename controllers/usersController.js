@@ -50,20 +50,19 @@ var control = require('../schemas/control');
   	}
   };
 
-  exports.deleteUser={
-  	auth: {
-  		mode:'required',
-  		strategy:'session'
-  	},
-  	handler: function(request, reply){
-  		user.findOneAndRemove({ usuarioname:request.payload.usuarioname }, function(err) {
-  			if (err) {
-  				throw err;
-  			}
-  			return reply('Eliminado exitosamente');
-  		});
-  	}
-  };
+	exports.deleteUser={
+
+	handler: function(request, reply){
+		console.log(request.payload + "estoy en backend")
+		var usuario =	user.findOneAndRemove({ _id:request.params.id }, function(err) {
+
+			if (err) {
+				throw err;
+			}
+			return reply('Eliminado exitosamente');
+		});
+	}
+};
 
 
 	exports.getUser = {
@@ -74,6 +73,7 @@ var control = require('../schemas/control');
           var array = [];
           for (var i = 0; i < data.length; i++) {
             var new_usuario = {
+							_id: data[i]._id,
               Firstname: data[i].Firstname,
               Secondname: data[i].Secondname,
               account: data[i].account,

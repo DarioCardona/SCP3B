@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 
 var ClassSchema = new mongoose.Schema({
-  class_code : Number,
+  class_code : String,
   class_name: String,
   unity: Number,
 
