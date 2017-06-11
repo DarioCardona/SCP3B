@@ -1,25 +1,25 @@
 var SHA3 = require("crypto-js/sha3");
 var boom = require('boom');
-var user = require('../schemas/user');
+var history = require('../schemas/history');
 
 
 
-	exports.createUser = {
+	exports.createHistory = {
 		handler: function(request, reply) {
 	   console.log(request.payload);
-			var usuario = new user({
-				Firstname: request.payload.Firstname,
-				Secondname: request.payload.Secondname,
-				account: request.payload.account,
-	      id: SHA3( request.payload.id),
-	      cel: SHA3( request.payload.cel),
-	      direction:SHA3( request.payload.direction),
-				carrier: request.payload.carrier,
+			var historial = new history({
+				class_code: request.payload.class_code,
+				year: request.payload.year,
+				semester: request.payload.semester,
+	      period:  request.payload.period,
+	      score: SHA3( request.payload.score),
+	      state:SHA3( request.payload.state),
+
 			});
-		  usuario.save(function (err) {
-		  	console.log("usuario saved")
+		  historial.save(function (err) {
+		  	console.log("historial saved")
 		  	if(err){
-		  		return reply('El usuario debe ser unico ' + err);
+		  		return reply('El historial debe ser unico ' + err);
 		  	}else{
 	        return reply('Usuario agregado exitosamente');
 	      }
