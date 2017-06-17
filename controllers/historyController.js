@@ -1,6 +1,9 @@
 var SHA3 = require("crypto-js/sha3");
 var boom = require('boom');
 var history = require('../schemas/history');
+var key = 'real secret keys should be long and random';
+
+var encryptor = require('simple-encryptor')(key);
 
 
 
@@ -9,11 +12,12 @@ var history = require('../schemas/history');
 	   console.log(request.payload);
 			var historial = new history({
 				class_code: request.payload.class_code,
+				student: request.payload.student,
 				year: request.payload.year,
 				semester: request.payload.semester,
 	      period:  request.payload.period,
-	      score: SHA3( request.payload.score),
-	      state:SHA3( request.payload.state),
+	      score:  request.payload.score,
+	      state:encryptor.encrypt( request.payload.state),
 
 			});
 		  historial.save(function (err) {
@@ -54,7 +58,7 @@ var history = require('../schemas/history');
 
 	handler: function(request, reply){
 		console.log(request.payload + "estoy en backend")
-		var usuario =	user.findOneAndRemove({ _id:request.params.id }, function(err) {
+		var historial =	user.findOneAndRemove({ _id:request.params.id }, function(err) {
 
 			if (err) {
 				throw err;
@@ -65,24 +69,25 @@ var history = require('../schemas/history');
 };
 
 
-	exports.getUser = {
+	exports.getHistory = {
 
   	handler: function(request, reply){
-  		var usuario = user.find({},function(err,data){
+  		var historial = history.find({},function(err,data){
   			if(!err){
           var array = [];
           for (var i = 0; i < data.length; i++) {
-            var new_usuario = {
+            var historia = {
 							_id: data[i]._id,
-              Firstname: data[i].Firstname,
-              Secondname: data[i].Secondname,
-              account: data[i].account,
-              id: data[i].id,
-              cel: data[i].cel,
-              direction: data[i].direction,
-              carrier: data[i].carrier,// dia/mes/año
+							class_code: data[i].class_code,
+							student: data[i].student,
+							year: data[i].year,
+							semester: data[i].semester,
+				      period:  data[i].period,
+				      score:  data[i].score,
+				      state:encryptor.decrypt( data[i].state),
+
             }
-            array.push(new_usuario);
+            array.push(historia);
           };
 
   				return reply(array);

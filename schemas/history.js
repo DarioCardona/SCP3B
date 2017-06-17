@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var HistorySchema = new mongoose.Schema({
 
   class_code: String,
+  student:String,
   year: Date, //0 = limpio con problemas  1 = no limpiada
   semester: String,
   period:String,

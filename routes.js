@@ -13,10 +13,7 @@ exports.endpoints = [{method: 'GET', path: '/', config: {handler: function(reque
 					 {method: 'DELETE', path: '/v1/deleteClass/{id}', config: classController.deleteClass},
 					 {method: 'GET', path: '/v1/getClass', config: classController.getClass},
 					 {method: 'POST', path: '/v1/registerMatricula', config: historyController.createHistory},
-
-
-
-
+					 {method: 'GET', path: '/v1/getHistory', config: historyController.getHistory},
 					 {method: 'POST', path: '/v1/login', config: authController.login},
 					 {method: 'GET', path: '/v1/logout', config: authController.logout}
 			];

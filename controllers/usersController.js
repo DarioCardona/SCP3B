@@ -2,6 +2,10 @@ var SHA3 = require("crypto-js/sha3");
 var boom = require('boom');
 var user = require('../schemas/user');
 
+var key = 'real secret keys should be long and random';
+
+var encryptor = require('simple-encryptor')(key);
+
 
 
 	exports.createUser = {
@@ -9,12 +13,14 @@ var user = require('../schemas/user');
 	   console.log(request.payload);
 			var usuario = new user({
 				Firstname: request.payload.Firstname,
+				password: encryptor.encrypt(request.payload.password),
 				Secondname: request.payload.Secondname,
 				account: request.payload.account,
-	      id: SHA3( request.payload.id),
-	      cel: SHA3( request.payload.cel),
-	      direction:SHA3( request.payload.direction),
+	      id: encryptor.encrypt( request.payload.id),
+	      cel: encryptor.encrypt( request.payload.cel),
+	      direction:encryptor.encrypt( request.payload.direction),
 				carrier: request.payload.carrier,
+				role: request.payload.role,
 			});
 		  usuario.save(function (err) {
 		  	console.log("usuario saved")
@@ -34,14 +40,18 @@ var user = require('../schemas/user');
 
   		var usuario = user.findOne({usuarioname:request.payload.usuarioname},function(err,answer){
         console.log(request.payload)
-
+				if(request.payload.password){
+         answer.password = SHA3(request.payload.password)
+				 //console.log("entro")
+      	}
   			answer.Firstname= request.payload.Firstname
   			answer.Secondname= request.payload.Secondname
   			answer.account= request.payload.account
-				answer.id= request.payload.id
-        answer.cel = request.payload.cel
-        answer.direction = request.payload.direction
+				answer.id= encryptor.encrypt(request.payload.id)
+        answer.cel = encryptor.encrypt(request.payload.cel)
+        answer.direction = encryptor.encrypt(request.payload.direction)
         answer.carrier = request.payload.carrier
+				answer.role = request.payload.role
 
 
   			answer.save();
@@ -77,10 +87,11 @@ var user = require('../schemas/user');
               Firstname: data[i].Firstname,
               Secondname: data[i].Secondname,
               account: data[i].account,
-              id: data[i].id,
-              cel: data[i].cel,
-              direction: data[i].direction,
+              id: encryptor.decrypt(data[i].id),
+              cel: encryptor.decrypt(data[i].cel),
+              direction:encryptor.decrypt( data[i].direction),
               carrier: data[i].carrier,// dia/mes/año
+							role: data[i].role,//
             }
             array.push(new_usuario);
           };
